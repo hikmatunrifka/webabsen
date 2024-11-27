@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi Pegawai</title>
+    <link rel="stylesheet" href="absen.css">
+    <script>
+        // Fungsi untuk mendapatkan tanggal saat ini dalam format "Senin, 28 Oktober 2024"
+        function getFormattedDate() {
+            const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const months = [
+                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+            ];
+
+            const today = new Date();
+            const dayName = days[today.getDay()];
+            const day = today.getDate();
+            const month = months[today.getMonth()];
+            const year = today.getFullYear();
+
+            return `${dayName}, ${day} ${month} ${year}`;
+        }
+
+        // Memasukkan tanggal ke elemen HTML setelah halaman dimuat
+        window.onload = function() {
+            document.getElementById("current-date").innerText = getFormattedDate();
+        };
+    </script>
+</head>
+<body>
+    <div class="header">
+        <button class="logout-button">⮌</button> <!-- Tombol logout -->
+    </div>
+
+    <div class="content">
+        <div class="card">
+            <h2>Absensi Pegawai BSI BA Lampriet</h2>
+            <p id="current-date"></p> <!-- Tanggal ditampilkan di sini -->
+        </div>
+        <button class="absen-button">Anda Sudah Absen</button>
+    </div>
+</body>
+</html>

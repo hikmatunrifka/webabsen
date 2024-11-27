@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <!-- Logo -->
+    <div class="logo-container">
+        <img src="logo.png" alt="BSI Logo" class="logo-image">
+    </div>
+
+    <!-- Login Form -->
+    <div class="login-container">
+        <form id="loginForm" class="login-form">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Masukkan Username" required class="input-bar">
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Masukkan Password" required class="input-bar">
+            </div>
+            <button type="submit" class="login-button">Login</button>
+            <a href="register.html">Register</a>
+        </form>
+    </div>
+    <!-- Firebase SDK and App Script with type="module" -->
+    <script type="module">
+        // Importing Firebase and Firestore modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEe4nakmggzLYa7ZVOWlpiqWAEHcXN2jA",
+            authDomain: "bsi-absen.firebaseapp.com",
+            projectId: "bsi-absen",
+            storageBucket: "bsi-absen.appspot.com",
+            messagingSenderId: "144718640768",
+            appId: "1:144718640768:web:15d5fc765d12e776139865",
+            measurementId: "G-JV2FYDF7M8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Login function
+        async function loginUser(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                // Query Firestore for the user with matching username
+                const usersRef = collection(db, "users");
+                const q = query(usersRef, where("username", "==", username));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    let userFound = false;
+                    querySnapshot.forEach((doc) => {
+                        const userData = doc.data();
+                        // Check if password matches
+                        if (userData.password === password) {
+                            userFound = true;
+                            alert("Login successful!");
+
+                            // Save user role and ID to localStorage
+                            localStorage.setItem("loggedInUsername", username);
+                            localStorage.setItem("loggedInnoID", userData.no_id);
+                            localStorage.setItem("userRole", userData.role); // Simpan role pengguna
+
+                            // Redirect based on user role
+                            if (userData.role === "admin") {
+                                window.location.href = "admin.html"; // Redirect ke halaman admin
+                            } else {
+                                window.location.href = "absen.html"; // Redirect ke halaman absen
+                            }
+                        }
+                    });
+                    if (!userFound) {
+                        alert("Password incorrect");
+                    }
+                } else {
+                    alert("User not found");
+                }
+            } catch (error) {
+                console.error("Error logging in:", error);
+                alert("Error logging in: " + error.message);
+            }
+        }
+
+        // Attach event listener to the form submission
+        document.getElementById("loginForm").addEventListener("submit", loginUser);
+    </script>
+</body>
+</html>

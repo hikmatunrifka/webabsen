@@ -1,0 +1,201 @@
+/* Reset margin dan padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Body: Latar belakang dan tata letak tengah */
+body {
+    background-image: url("BG1.png");
+    background-size: cover; /* Membuat gambar memenuhi seluruh layar */
+    background-position: center; /* Menempatkan gambar di tengah */
+    background-repeat: no-repeat; /* Mencegah pengulangan gambar */
+    background-attachment: fixed; /* Agar background tetap di tempat saat scrolling */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Header dengan tombol logout */
+.header {
+    width: 100%;
+    background-color: #d9d9d9; /* Warna abu-abu */
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    position: fixed; /* Tetap di bagian atas */
+    top: 0;
+    left: 0;
+    z-index: 100; /* Agar berada di atas konten lain */
+}
+
+/* Tombol logout */
+.logout-button {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+
+/* Tombol logout */
+.logout-button {
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Container utama */
+.content {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Jarak antara card dan tombol */
+}
+
+/* Kartu berisi judul dan tanggal */
+.card {
+    background-color: white;
+    padding: 30px 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #e0e0e0; /* Warna border */
+    text-align: center;
+}
+
+/* Judul dan tanggal dalam kartu */
+.card h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+.card p {
+    font-size: 18px;
+    color: #555;
+}
+
+/* Tombol absen */
+.absen-button {
+    background-color: #d3d3d3; /* Warna abu muda */
+    border: none;
+    border-radius: 20px;
+    padding: 10px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Hover untuk tombol absen */
+.absen-button:hover {
+    background-color: #b0b0b0;
+}
+
+/* Dropdown toggle untuk foto dan username */
+.btn.btn-secondary.dropdown-toggle {
+    background-color: black; /* Buat latar belakang tombol transparan */
+    border: none; /* Hilangkan border pada tombol */
+    padding: 0; /* Hilangkan padding default */
+    cursor: pointer; /* Ubah kursor menjadi pointer */
+    text-align: left; /* Teks sejajar kiri */
+}
+
+/* Dropdown toggle untuk foto dan username */
+.btn.btn-secondary.dropdown-toggle {
+    background-color: transparent; /* Buat latar belakang tombol transparan */
+    border: none; /* Hilangkan border pada tombol */
+    padding: 0 0 15px; /* Hilangkan padding default */
+    margin: 0 ; /* Hilangkan margin agar sesuai ukuran */
+    cursor: pointer; /* Ubah kursor menjadi pointer */
+    text-align: left; /* Teks sejajar kiri */
+    display: flex; /* Supaya kontennya fleksibel */
+    align-items: center; /* Ratakan isi tombol secara vertikal */
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    position: absolute; /* Dropdown muncul di bawah */
+    top: 100%; /* Posisikan di bawah toggle */
+    left: 0; /* Atur posisi lebih maju ke depan */
+    transform: translateX(10px); /* Geser maju ke depan */
+    background-color: #fff; /* Latar belakang putih */
+    border: 1px solid #ddd; /* Border tipis abu-abu */
+    border-radius: 5px; /* Membulatkan sudut */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
+    z-index: 1000; /* Pastikan dropdown berada di atas elemen lain */
+    min-width: 150px; /* Lebar minimal */
+    padding: 0; /* Hilangkan padding pada dropdown */
+}
+
+
+/* Kontainer utama untuk menampung card */
+.profile-container {
+    position: absolute;
+    top: 0px;
+    left: 0px; /* Posisikan kontainer di kiri halaman */
+    display: inline-block; /* Flexbox untuk susun elemen secara horizontal */
+    align-items: center; /* Menjaga foto dan nama sejajar secara vertikal */
+    text-align: left; /* Menyelaraskan teks ke kiri */
+    margin: 0; /* Hilangkan margin pada kontainer utama */
+    padding: 0; /* Hilangkan padding jika ada */
+}
+
+/* Card untuk foto dan username */
+.photo-card {
+    display: flex; /* Flexbox untuk susun foto dan nama secara horizontal */
+    align-items: center; /* Menjaga foto dan nama sejajar secara vertikal */
+    gap: 15px; /* Memberikan jarak antara foto dan nama */
+    padding-top: 20px;
+}
+
+/* Gaya untuk foto profil */
+#userPhoto {
+    width: 60px; /* Ukuran foto */
+    height: 60px; /* Ukuran foto */
+    border-radius: 50%; /* Membuat foto berbentuk lingkaran */
+    object-fit: cover; /* Menjaga foto tetap sesuai dan terpotong dengan baik */
+}
+
+/* Gaya untuk teks nama pengguna */
+.photo-username {
+    font-size: 18px; /* Ukuran font untuk username */
+    padding-top: 0px; /* Menambahkan jarak atas pada nama */
+    margin-top: 5px; /* Jarak antara foto dan username */
+    color: black; /* Warna teks untuk username */
+}
+
+
+
+
+/* Gaya untuk header */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Tombol logout di sisi kanan */
+    padding: 10px 20px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Gaya untuk logo di bawah header dan di atas konten */
+.logo-container {
+    text-align: center; /* Menjaga logo berada di tengah */
+    margin: 20px 0; /* Memberikan jarak atas dan bawah */
+}
+
+.logo {
+    max-width: 60%; /* Menjaga agar logo tidak melar lebih besar dari ukuran wadah */
+    height: auto; /* Menyesuaikan tinggi logo dengan lebar */
+    max-height: 100px; /* Tentukan tinggi maksimum untuk logo */
+}
+
+/* Gaya untuk konten */
+.content {
+    padding: 0px;
+    text-align: center;
+}

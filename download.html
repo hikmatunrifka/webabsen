@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi Pegawai</title>
+    <link rel="stylesheet" href="download.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script> <!-- Menambahkan autoTable secara terpisah -->
+</head>
+<body>
+<!-- Header dengan tombol kecil untuk kembali -->
+<div class="header">
+    <button class="back-button" onclick="goBack()">
+        ⬅
+    </button>
+</div>
+
+
+    <!-- Tanggal dan Hari -->
+    <div class="date-container">
+        <p id="currentDate" style="color: black;"></p> <!-- Tempat untuk menampilkan tanggal dinamis -->
+    </div>
+
+    <!-- Kontainer Utama -->
+    <div class="content">
+        <!-- Tabel Absensi -->
+        <table class="attendance-table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Pegawai</th>
+                    <th>No ID</th>
+                    <th>Jam Masuk</th>
+                </tr>
+            </thead>
+            <tbody id="attendanceBody">
+                <!-- Data absensi akan ditambahkan di sini -->
+            </tbody>
+        </table>
+
+        <!-- Tombol Download -->
+        <button class="download-button" id="downloadButton">Download PDF</button>
+    </div>
+
+    <!-- Firebase SDK and App Script with type="module" -->
+    <script type="module">
+        // Importing Firebase and Firestore modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEe4nakmggzLYa7ZVOWlpiqWAEHcXN2jA",
+            authDomain: "bsi-absen.firebaseapp.com",
+            projectId: "bsi-absen",
+            storageBucket: "bsi-absen.appspot.com",
+            messagingSenderId: "144718640768",
+            appId: "1:144718640768:web:15d5fc765d12e776139865",
+            measurementId: "G-JV2FYDF7M8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Ambil data absensi dari Firestore
+        async function fetchAbsenData() {
+            const absenRef = collection(db, "absen");
+            const today = new Date().toISOString().split('T')[0]; // Ambil tanggal hari ini (yyyy-mm-dd)
+            const q = query(absenRef, where("tanggal", "==", today));
+
+            try {
+                const querySnapshot = await getDocs(q);
+                const attendanceBody = document.getElementById("attendanceBody");
+                let no = 1;
+
+                // Loop untuk menambahkan data ke dalam tabel
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = ` 
+                        <td>${no}</td>
+                        <td>${data.nama}</td>
+                        <td>${data.no_id}</td>
+                        <td>${data.jam_masuk}</td>
+                    `;
+
+                    attendanceBody.appendChild(row);
+                    no++;
+                });
+            } catch (error) {
+                console.error("Error fetching absen data: ", error);
+            }
+        }
+
+        // Fungsi untuk mengunduh data absensi dalam format PDF
+        async function downloadPDF() {
+            const absenRef = collection(db, "absen");
+            const today = new Date().toISOString().split('T')[0];
+            const q = query(absenRef, where("tanggal", "==", today));
+            const querySnapshot = await getDocs(q);
+            const data = [];
+
+            querySnapshot.forEach((doc) => {
+                data.push(doc.data());
+            });
+
+            // Membuat instance jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Menambahkan judul dan tanggal
+            doc.setFontSize(18);
+            doc.text("Laporan Absensi Pegawai", 20, 20);
+            doc.setFontSize(12);
+            doc.text(`Tanggal:${today}`, 20, 30);
+
+            // Menambahkan tabel
+            const tableColumn = ["No", "Nama Pegawai", "No ID", "Jam Masuk"];
+            const tableRows = [];
+
+            data.forEach((row, index) => {
+                tableRows.push([index + 1, row.nama, row.no_id, row.jam_masuk]);
+            });
+
+            // Styling tabel (warna latar belakang untuk header, font, dll)
+            doc.autoTable({
+                head: [tableColumn],
+                body: tableRows,
+                startY: 40, // Menentukan posisi awal tabel
+                theme: 'grid', // Tema grid untuk tabel
+                headStyles: {
+                    fillColor: [22, 160, 133], // Warna latar belakang header
+                    textColor: 255, // Warna teks header
+                    fontSize: 12,
+                    fontStyle: 'bold',
+                },
+                bodyStyles: {
+                    fontSize: 10,
+                },
+                margin: { top: 40, left: 20, right: 20 }, // Margin tabel
+                didDrawPage: function (data) {
+                    // Menambahkan garis pemisah setelah judul
+                    doc.setLineWidth(0.5);
+                    doc.line(data.settings.margin.left, 35, data.settings.margin.left + 180, 35);
+                },
+            });
+
+            // Menambahkan Nama dan Jabatan di bawah tabel dengan posisi di kanan
+            const pageWidth = doc.internal.pageSize.width; // Lebar halaman PDF
+            const marginRight = 60; // Margin kanan (3cm = 85.05 points)
+            const marginBottom = 60; // Margin bawah (3cm = 85.05 points)
+
+            // Posisi untuk teks di kanan halaman
+            const rightPosition = pageWidth - marginRight;  // Posisi di kanan halaman dengan margin
+
+            // Menambahkan Nama dan Jabatan dengan posisi rata kiri tetapi letak di kanan
+            doc.setFontSize(12);
+
+        
+            doc.text("Branch Manager", rightPosition, doc.autoTable.previous.finalY + 80); // Jabatan
+            doc.text("Saimun", rightPosition, doc.autoTable.previous.finalY + 110); // Nama
+
+            // Mengunduh file PDF
+            doc.save("data_absen.pdf");
+        }
+
+        // Panggil fungsi untuk menampilkan data absensi
+        fetchAbsenData();
+
+        // Event listener untuk tombol unduh PDF
+        document.getElementById("downloadButton").addEventListener("click", downloadPDF);
+
+        // Menampilkan tanggal dinamis
+        function getFormattedDate() {
+            const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+            const today = new Date();
+            const dayOfWeek = days[today.getDay()]; // Mendapatkan nama hari
+            const dayOfMonth = today.getDate(); // Mendapatkan tanggal (1-31)
+            const month = months[today.getMonth()]; // Mendapatkan bulan (0-11)
+            const year = today.getFullYear(); // Mendapatkan tahun (yyyy)
+
+            return `${dayOfWeek}, ${dayOfMonth} ${month} ${year}`;
+        }
+
+        // Menampilkan tanggal ke elemen dengan id 'currentDate'
+        document.getElementById("currentDate").innerText = getFormattedDate();
+    </script>
+    <script>
+        function goBack() {
+        // Ganti 'absen.html' dengan nama file atau URL halaman absen Anda
+        window.location.href = "absen.html"; 
+
+}
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Absen Page</title>
+    <link rel="stylesheet" href="absen.css">
+</head>
+<body>
+    <div class="profile-container">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="photo-card">
+                <img src="profil.jpg" alt="User Photo" id="userPhoto">
+                <span id="photoUsername" class="photo-username"></span>
+            </div>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" id="logoutButton">Keluar</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="card">
+            <h2>Absensi Pegawai BSI BA Lampriet</h2>
+            <p id="currentDate"></p>
+        </div>
+        <button id="absenButton" class="absen-button">Absen</button>
+        <p id="absenStatus"></p>
+    </div>
+
+    <!-- Firebase SDK and App Script with type="module" -->
+    <script type="module">
+        // Importing Firebase and Firestore modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEe4nakmggzLYa7ZVOWlpiqWAEHcXN2jA",
+            authDomain: "bsi-absen.firebaseapp.com",
+            projectId: "bsi-absen",
+            storageBucket: "bsi-absen.appspot.com",
+            messagingSenderId: "144718640768",
+            appId: "1:144718640768:web:15d5fc765d12e776139865",
+            measurementId: "G-JV2FYDF7M8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function saveAbsenData(username, noID) {
+            try {
+                const userRef = collection(db, "absen");
+                const now = new Date();
+                const jamMasuk = now.toLocaleTimeString();
+                const tanggal = now.toISOString().split('T')[0];
+
+                await addDoc(userRef, {
+                    nama: username,
+                    no_id: noID,
+                    jam_masuk: jamMasuk,
+                    tanggal: tanggal
+                });
+
+                alert("Absen berhasil!");
+                document.getElementById("absenButton").disabled = true;
+                document.getElementById("absenButton").style.backgroundColor = "#28a745";
+                document.getElementById("absenButton").innerText = "Sudah Absen";
+            } catch (error) {
+                console.error("Error saving absen data:", error);
+                alert("Terjadi kesalahan saat menyimpan absen.");
+            }
+        }
+
+        async function checkIfUserHasAbsenToday(username) {
+            const absenRef = collection(db, "absen");
+            const today = new Date().toISOString().split('T')[0];
+            const q = query(absenRef, where("nama", "==", username), where("tanggal", "==", today));
+
+            const querySnapshot = await getDocs(q);
+            return !querySnapshot.empty;
+        }
+
+        const loggedInUsername = localStorage.getItem("loggedInUsername");
+        const loggedInnoID = localStorage.getItem("loggedInnoID");
+
+        if (loggedInUsername) {
+            document.getElementById("photoUsername").innerText = loggedInUsername;
+
+            checkIfUserHasAbsenToday(loggedInUsername).then((hasAbsen) => {
+                if (hasAbsen) {
+                    document.getElementById("absenButton").disabled = true;
+                    document.getElementById("absenButton").style.backgroundColor = "#28a745";
+                    document.getElementById("absenButton").innerText = "Sudah Absen";
+                    document.getElementById("absenStatus").innerText = " ";
+                } else {
+                    const now = new Date();
+                    const hours = now.getHours();
+                    if (hours >= 8 && hours < 24) {
+                        document.getElementById("absenButton").disabled = false;
+                        document.getElementById("absenStatus").innerText = "";
+                    } else {
+                        document.getElementById("absenButton").disabled = true;
+                        document.getElementById("absenStatus").innerText = " ";
+                    }
+                }
+            });
+        } else {
+            alert("Tidak ada pengguna yang login. Harap login terlebih dahulu.");
+            window.location.href = "login.html";
+        }
+
+        document.getElementById("absenButton").addEventListener("click", () => {
+            saveAbsenData(loggedInUsername, loggedInnoID);
+        });
+
+        document.getElementById("logoutButton").addEventListener("click", function() {
+            localStorage.removeItem("loggedInUsername");
+            localStorage.removeItem("loggedInnoID");
+            window.location.href = "login.html";
+        });
+
+        // Fungsi untuk menampilkan tanggal secara realtime
+        function formatTanggal(tanggal) {
+            const hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const bulan = [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+
+            const namaHari = hari[tanggal.getDay()];
+            const namaBulan = bulan[tanggal.getMonth()];
+            const tahun = tanggal.getFullYear();
+            const tanggalHariIni = tanggal.getDate();
+
+            return `${namaHari}, ${tanggalHariIni} ${namaBulan} ${tahun}`;
+        }
+
+        document.getElementById("currentDate").innerText = formatTanggal(new Date());
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

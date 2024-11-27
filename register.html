@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="login-container">
+        <form id="registerForm" class="login-form">
+            <div class="input-group">
+                <label for="no_id">No ID</label>
+                <input type="text" id="no_id" placeholder="Masukkan No ID" required class="input-bar">
+            </div>
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Masukkan Username" required class="input-bar">
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Masukkan Password" required class="input-bar">
+            </div>
+            <div class="input-group">
+                <label for="confirmPassword">Konfirmasi Password</label>
+                <input type="password" id="confirmPassword" placeholder="Konfirmasi Password" required class="input-bar">
+            </div>
+            <div class="input-group">
+                <label for="role">Pilih Role</label>
+                <select id="role" required class="input-bar">
+                    <option value="" disabled selected>Pilih Role</option>
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
+                </select>
+            </div>
+            <button type="submit" class="login-button">Register</button>
+            <a href="login.html">Login</a>
+        </form>
+    </div>
+
+    <!-- Firebase SDK and App Script with type="module" -->
+    <script type="module">
+        // Importing Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEe4nakmggzLYa7ZVOWlpiqWAEHcXN2jA",
+            authDomain: "bsi-absen.firebaseapp.com",
+            projectId: "bsi-absen",
+            storageBucket: "bsi-absen.appspot.com",
+            messagingSenderId: "144718640768",
+            appId: "1:144718640768:web:15d5fc765d12e776139865",
+            measurementId: "G-JV2FYDF7M8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Register function
+        async function registerUser(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const noID = document.getElementById("no_id").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const role = document.getElementById("role").value;
+
+            if (password !== confirmPassword) {
+                alert("Password dan Konfirmasi Password tidak cocok!");
+                return;
+            }
+
+            try {
+                // Add user data to Firestore
+                const docRef = await addDoc(collection(db, "users"), {
+                    no_id: noID,
+                    username: username,
+                    password: password, // Pastikan password di-hash sebelum disimpan di database (untuk demo ini langsung disimpan)
+                    role: role
+                });
+
+                alert("Registrasi berhasil! ID dokumen: " + docRef.id);
+                window.location.href = "login.html"; // Redirect ke halaman login
+            } catch (error) {
+                console.error("Error adding document:", error);
+                alert("Error saat registrasi: " + error.message);
+            }
+        }
+
+        // Attach event listener to the form submission
+        document.getElementById("registerForm").addEventListener("submit", registerUser);
+    </script>
+</body>
+</html>

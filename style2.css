@@ -1,0 +1,84 @@
+/* Kontainer utama untuk profil */
+.profile-container {
+    position: relative; /* Relatif untuk mendukung dropdown positioning */
+    display: inline-block;
+    margin: 10px; /* Margin untuk mengatur jarak kontainer */
+}
+
+/* Dropdown toggle untuk foto dan username */
+.btn.btn-secondary.dropdown-toggle {
+    background-color: transparent; /* Latar belakang transparan */
+    border: none; /* Hilangkan border tombol */
+    padding: 0; /* Hilangkan padding default */
+    cursor: pointer;
+}
+
+/* Foto dan username card */
+.photo-card {
+    display: flex; /* Elemen dalam card berjejer horizontal */
+    align-items: center; /* Sejajarkan vertikal antara foto dan username */
+    gap: 10px; /* Jarak antara foto dan username */
+}
+
+/* Foto profil */
+#userPhoto {
+    width: 50px; /* Ukuran foto */
+    height: 50px; /* Ukuran foto */
+    border-radius: 50%; /* Membuat foto berbentuk lingkaran */
+    object-fit: cover; /* Menjaga rasio gambar */
+}
+
+/* Username styling */
+.photo-username {
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+    position: absolute; /* Tetap berada di bawah tombol */
+    top: 100%; /* Posisi tepat di bawah toggle */
+    left: 0; /* Awalnya sejajar kiri */
+    transform: translateX(10px); /* Geser sedikit ke kanan */
+    margin: 0; /* Hilangkan margin tambahan */
+    padding: 5px 0; /* Padding vertikal dalam dropdown */
+    background-color: #fff; /* Latar belakang putih */
+    border: 1px solid #ddd; /* Border tipis */
+    border-radius: 5px; /* Membulatkan sudut */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
+    min-width: 150px; /* Lebar minimal dropdown */
+    z-index: 1000; /* Pastikan dropdown muncul di atas */
+}
+
+/* Dropdown item */
+.dropdown-menu .dropdown-item {
+    padding: 8px 20px; /* Ruang dalam setiap item dropdown */
+    font-size: 14px;
+    color: #333;
+    text-decoration: none; /* Hilangkan garis bawah */
+    cursor: pointer;
+    transition: background-color 0.2s ease; /* Efek hover */
+}
+
+/* Hover efek untuk dropdown item */
+.dropdown-menu .dropdown-item:hover {
+    background-color: #f8f9fa; /* Latar belakang saat hover */
+    color: #007bff; /* Teks saat hover */
+}
+
+/* Responsif untuk tampilan kecil */
+@media (max-width: 768px) {
+    #userPhoto {
+        width: 40px;
+        height: 40px;
+    }
+
+    .photo-username {
+        font-size: 14px;
+    }
+
+    .dropdown-menu {
+        min-width: 120px;
+    }
+}

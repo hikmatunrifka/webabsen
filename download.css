@@ -1,0 +1,132 @@
+/* Mengatur tampilan dasar */
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url("BG1.png");
+    background-size: cover; /* Membuat gambar memenuhi seluruh layar */
+    background-position: center; /* Menempatkan gambar di tengah */
+    background-repeat: no-repeat; /* Mencegah pengulangan gambar */
+    background-attachment: fixed; /* Background tetap saat scrolling */
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden; /* Mencegah scroll pada body */
+}
+
+/* Header dengan tombol kecil untuk kembali */
+.header {
+    width: 100%;
+    background-color: rgba(217, 217, 217, 0.8); /* Warna abu-abu dengan transparansi */
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start; /* Tombol kembali di kiri */
+    align-items: center;
+    position: fixed; /* Tetap di bagian atas */
+    top: 0;
+    left: 0;
+    z-index: 100; /* Agar berada di atas konten lain */
+    padding-left: 20px; /* Tambahkan jarak dari tepi */
+}
+
+/* Tombol kembali */
+.logout-button {
+    background-color: white;
+    border-radius: 50%; /* Membuat tombol berbentuk lingkaran */
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bayangan tombol */
+    transition: background-color 0.3s, transform 0.2s; /* Efek transisi */
+}
+
+.logout-button:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.1); /* Perbesar saat hover */
+}
+
+.logout-button:active {
+    transform: scale(0.95); /* Kecilkan saat ditekan */
+}
+
+/* Kontainer tanggal */
+.date-container {
+    width: 90%; /* Sesuaikan lebar dengan kontainer utama */
+    max-width: 800px;
+    text-align: left; /* Rata kiri agar sesuai gambar */
+    font-weight: bold;
+    font-size: 18px;
+    color: white; /* Warna teks putih agar kontras */
+    margin-top: 80px; /* Jarak dari header */
+    margin-bottom: 5px; /* Jarak kecil ke tabel */
+}
+
+/* Tabel dengan nama pegawai */
+.table-container {
+    width: 90%;
+    max-width: 800px;
+    background-color: #7aada5; /* Warna latar belakang tabel */
+    color: black;
+    padding: 10px;
+    margin: auto;
+    text-align: center;
+    border-collapse: collapse;
+    border-radius: 8px; /* Membuat sudut tabel melengkung */
+    overflow: hidden;
+}
+
+.table-container th, .table-container td {
+    border: 1px solid black;
+    padding: 8px;
+    font-size: 14px;
+}
+
+/* Kontainer utama */
+.content {
+    width: 90%; /* Lebar kontainer */
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Tabel absensi */
+.attendance-table {
+    width: 100%; /* Lebar penuh */
+    border-collapse: collapse;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.attendance-table th, 
+.attendance-table td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.attendance-table th {
+    background-color: #e6e6e6;
+    font-weight: bold;
+}
+
+/* Tombol download */
+.download-button {
+    background-color: #7aada5; /* Warna tombol */
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+/* Efek hover pada tombol download */
+.download-button:hover {
+    background-color: #5f8f82; /* Warna lebih gelap saat hover */
+}

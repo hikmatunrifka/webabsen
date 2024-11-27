@@ -1,0 +1,112 @@
+/* Global: Mengatur tampilan dasar untuk body */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f9fbfb; /* Warna latar belakang */
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Agar elemen di tengah saling bertumpuk */
+    background-image: url("BG1.png");
+    background-size: cover; /* Membuat gambar memenuhi seluruh layar */
+    background-position: center; /* Menempatkan gambar di tengah */
+    background-repeat: no-repeat; /* Mencegah pengulangan gambar */
+    background-attachment: fixed; /* Background tetap saat scrolling */
+}
+
+/* Styling untuk container login */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f9f7f7; /* Warna putih terang */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+    width: 280px; /* Lebar container */
+}
+
+/* Judul */
+h1 {
+    margin: 0;
+    color: #333;
+}
+
+/* Form login */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* Jarak antar elemen */
+    width: 100%; /* Form penuh dalam container */
+}
+
+/* Group input */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Jarak antara label dan input */
+    width: 100%;
+}
+
+/* Label */
+label {
+    font-size: 16px;
+    color: #333;
+    text-align: left;
+}
+
+/* Input bar */
+.input-bar {
+    width: 100%; /* Lebar penuh */
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    font-size: 16px;
+}
+
+/* Tombol login */
+.login-button {
+    text-align: center;
+    width: 40%;
+    height: 40px;
+    background-color: #007b5e;
+    color: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+/* Efek hover untuk tombol login */
+.login-button:hover {
+    background-color: #005f47;
+}
+
+/* Link daftar */
+a {
+    font-size: 14px;
+    color: #007b5e;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Logo */
+.logo-container {
+    position: absolute; /* Logo bebas diposisikan */
+    top: 15px; /* Jarak dari atas */
+    right: 200px; /* Jarak dari kanan */
+}
+
+.logo-image {
+    width: 150px; /* Atur ukuran logo */
+    height: auto;
+}
